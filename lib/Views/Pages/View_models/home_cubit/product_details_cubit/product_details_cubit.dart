@@ -39,13 +39,13 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
 
   // ---------------- Counter ----------------
 
-  void incrementCounter() {
+  void incrementCounter(String productId) {
     quantity++;
 
     emit(QuantityCounterLoaded(value: quantity));
   }
 
-  void decrementCounter() {
+  void decrementCounter(String productId) {
     if (quantity <= 1) {
       return;
     }
@@ -69,14 +69,14 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     emit(ProductAddingToCart());
 
     final cartItem = AddToCartModel(
-      productId: productId,
+      id: DateTime.now().toIso8601String(),
+      product: products.firstWhere((product) => product.id == productId),
       quantity: quantity,
       size: selectedSize!.name,
     );
 
     Future.delayed(const Duration(seconds: 1), () {
       dummyCart.add(cartItem);
-
       emit(ProductAddedToCart(productId: productId));
     });
   }

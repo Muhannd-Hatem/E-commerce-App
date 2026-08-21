@@ -4,12 +4,14 @@ class CounterWidget extends StatelessWidget {
   final int value;
   final String productId;
   final dynamic cubit;
+  final int? initialValue;
 
   const CounterWidget({
     super.key,
     required this.value,
     required this.productId,
     required this.cubit,
+    this.initialValue,
   });
 
   @override
@@ -24,12 +26,16 @@ class CounterWidget extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: () => cubit.decrementCounter(),
+              onPressed: () => initialValue == null
+                  ? cubit.decrementCounter(productId, initialValue)
+                  : cubit.decrementCounter(productId),
               icon: const Icon(Icons.remove),
             ),
             Text(value.toString()),
             IconButton(
-              onPressed: () => cubit.incrementCounter(),
+              onPressed: () => initialValue == null
+                  ? cubit.incrementCounter(productId, initialValue)
+                  : cubit.incrementCounter(productId),
               icon: const Icon(Icons.add),
             ),
           ],

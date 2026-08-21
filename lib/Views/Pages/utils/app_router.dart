@@ -13,6 +13,7 @@ class AppRouter {
 
       case AppRouts.productDetailsRoute:
         final String productId = settings.arguments as String;
+
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) {
