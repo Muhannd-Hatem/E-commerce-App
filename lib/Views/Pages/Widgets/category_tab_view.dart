@@ -43,7 +43,7 @@ class CategoryTabView extends StatelessWidget {
 
                     // White Overlay
                     Positioned.fill(
-                      child: Container(color: Colors.white.withOpacity(0.15)),
+                      child: Container(color: Colors.white.withValues(alpha: 0.15)),
                     ),
 
                     // Text

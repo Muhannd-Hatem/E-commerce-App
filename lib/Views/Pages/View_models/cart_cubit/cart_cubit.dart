@@ -1,36 +1,64 @@
 import 'package:ecommerce_app/models/add_to_cart_model.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 part 'cart_state.dart';
 
-class cartcubit extends Cubit<CartState> {
-  cartcubit() : super(CartInitial());
+class CartCubit extends Cubit<CartState> {
+  CartCubit() : super(CartInitial());
 
-  int quantity = 1;
+  final Map<String, int> quantities = {};
 
+  //-----------------GET CART ITEMS-----------------//
   void getCartItems() {
+    debugPrint('GET CART LENGTH: ${dummyCart.length}');
+
     emit(CartLoading());
-    emit(CartLoaded(dummyCart));
-  }
 
-  void incrementCounter(String productId, [int? initialValue]) {
-    if (initialValue != null) {
-      quantity = initialValue;
+    for (final item in dummyCart) {
+      quantities[item.product.id] = item.quantity;
     }
-    quantity++;
 
-    emit(QuantityCounterLoaded(value: quantity));
+    emit(CartLoaded(dummyCart, _subtotal));
   }
 
-  void decrementCounter(String productId, [int? initialValue]) {
-    if (quantity <= 1) {
+  //-----------------INCREMENT-----------------//
+  void incrementCounter(String productId) {
+    final currentQuantity = quantities[productId] ?? 1;
+
+    final newQuantity = currentQuantity + 1;
+
+    quantities[productId] = newQuantity;
+
+    final index = dummyCart.indexWhere((item) => item.product.id == productId);
+    dummyCart[index] = dummyCart[index].copyWith(quantity: newQuantity);
+
+    emit(QuantityCounterLoaded(value: newQuantity, productId: productId));
+    emit(SubtotalUpdated(subtotal: _subtotal));
+  }
+
+  double get _subtotal => dummyCart.fold<double>(
+    0,
+    (previousValue, item) =>
+        previousValue + (item.product.price * item.quantity),
+  );
+
+  //-----------------DECREMENT-----------------//
+  void decrementCounter(String productId) {
+    final currentQuantity = quantities[productId] ?? 1;
+
+    if (currentQuantity <= 1) {
       return;
     }
 
-    if (initialValue != null) {
-      quantity = initialValue;
-    }
-    quantity--;
+    final newQuantity = currentQuantity - 1;
 
-    emit(QuantityCounterLoaded(value: quantity));
+    quantities[productId] = newQuantity;
+
+    final index = dummyCart.indexWhere((item) => item.product.id == productId);
+    dummyCart[index] = dummyCart[index].copyWith(quantity: newQuantity);
+
+    emit(QuantityCounterLoaded(value: newQuantity, productId: productId));
+    emit(SubtotalUpdated(subtotal: _subtotal));
   }
 }

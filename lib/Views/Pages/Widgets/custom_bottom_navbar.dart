@@ -1,7 +1,4 @@
-import 'package:ecommerce_app/Views/Pages/View_models/cart_cubit/cart_cubit.dart';
-import 'package:ecommerce_app/Views/Pages/View_models/home_cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 import 'package:ecommerce_app/Views/Pages/home_page.dart';
@@ -28,25 +25,39 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) {
-            final cubit = cartcubit();
-            cubit.getCartItems();
-            return cubit;
-          },
-        ),
+    return Scaffold(
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   leading: Padding(
+      //     padding: const EdgeInsets.all(5.0),
+      //     child: CircleAvatar(
+      //       backgroundImage: AssetImage('assets/images/personal_photo.jpg'),
+      //       radius: 30,
+      //     ),
+      //   ),
 
-        BlocProvider(
-          create: (context) {
-            final cubit = HomeCubit();
-            cubit.getHomeData();
-            return cubit;
-          },
-        ),
-      ],
-      child: PersistentTabView(
+      //   title: Column(
+      //     crossAxisAlignment: CrossAxisAlignment.start,
+      //     children: [
+      //       Text("Muhannd", style: Theme.of(context).textTheme.titleSmall),
+      //       Text(
+      //         "Let's go shopping!",
+      //         style: Theme.of(
+      //           context,
+      //         ).textTheme.titleSmall!.copyWith(color: Colors.grey),
+      //       ),
+      //     ],
+      //   ),
+
+      //   actions: [
+      //     IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+      //     IconButton(
+      //       onPressed: () {},
+      //       icon: Icon(Icons.notifications_outlined),
+      //     ),
+      //   ],
+      // ),
+      body: PersistentTabView(
         controller: _controller,
         tabs: [
           PersistentTabConfig(

@@ -1,5 +1,7 @@
 import 'package:ecommerce_app/models/add_to_cart_model.dart';
 import 'package:ecommerce_app/models/product_item_model.dart';
+import 'package:ecommerce_app/services/product_details_services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'product_details_state.dart';
@@ -13,20 +15,30 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
 
   int quantity = 1;
 
+  final productDetailsServices = ProductDetailsServicesImpl();
+
   // ---------------- Product Details ----------------
 
-  void getProductDetails(String id) {
+  Future<void> getProductDetails(String id) async {
     emit(ProductDetailsLoading());
 
-    Future.delayed(const Duration(seconds: 1), () {
-      selectedProduct = products.firstWhere((product) => product.id == id);
-
-      // Reset product-specific values
-      quantity = 1;
-      selectedSize = null;
-
+    try {
+      final selectedProduct = await productDetailsServices.fetchProductDetails(
+        id,
+      );
       emit(ProductDetailsLoaded(product: selectedProduct));
-    });
+    } catch (e) {
+      emit(ProductDetailsError(message: e.toString()));
+    }
+    // Future.delayed(const Duration(seconds: 1), () {
+    //   selectedProduct = products.firstWhere((product) => product.id == id);
+
+    //   // Reset product-specific values
+    //   quantity = 1;
+    //   selectedSize = null;
+
+    //   emit(ProductDetailsLoaded(product: selectedProduct));
+    // });
   }
 
   // ---------------- Size ----------------
@@ -58,14 +70,15 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   // ---------------- Add To Cart ----------------
 
   void addToCart(String productId) {
-    // Size validation
     if (selectedSize == null) {
       emit(ProductDetailsError(message: 'Please select a size first'));
-
       return;
     }
 
-    // Start loading
+    debugPrint('ADD PRODUCT ID: $productId');
+    debugPrint('QUANTITY: $quantity');
+    debugPrint('SIZE: ${selectedSize!.name}');
+
     emit(ProductAddingToCart());
 
     final cartItem = AddToCartModel(
@@ -77,6 +90,10 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
 
     Future.delayed(const Duration(seconds: 1), () {
       dummyCart.add(cartItem);
+
+      debugPrint('ADDED: ${cartItem.product.id}');
+      debugPrint('CART LENGTH: ${dummyCart.length}');
+
       emit(ProductAddedToCart(productId: productId));
     });
   }

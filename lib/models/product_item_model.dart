@@ -1,4 +1,4 @@
-enum ProductSize { S, M, L, XL }
+enum ProductSize { s, m, l, xl }
 
 class ProductItemModel {
   final String id;
@@ -56,6 +56,41 @@ class ProductItemModel {
       quantity: quantity ?? this.quantity,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'imgUrl': imgUrl,
+      'name': name,
+      'price': price,
+      'category': category,
+      'isFavorite': isFavorite,
+      'description': description,
+      'avarageRate': avarageRate,
+      'quantity': quantity,
+      'size': size?.name,
+    };
+  }
+
+  factory ProductItemModel.fromMap(
+    Map<String, dynamic> map,
+    String documentId,
+  ) {
+    return ProductItemModel(
+      id: documentId,
+      imgUrl: map['imgUrl'],
+      name: map['name'],
+      price: map['price'],
+      category: map['category'],
+      isFavorite: map['isFavorite'],
+      description: map['description'],
+      avarageRate: map['avarageRate'],
+      quantity: map['quantity'],
+      size: map['size'] != null
+          ? ProductSize.values.firstWhere((e) => e.name == map['size'])
+          : null,
+    );
+  }
 }
 
 List<ProductItemModel> products = [
@@ -64,7 +99,7 @@ List<ProductItemModel> products = [
     imgUrl:
         "https://images.pexels.com/photos/22432991/pexels-photo-22432991.jpeg",
     name: "Luxury Leather Bags",
-    price: 25000,
+    price: 2500,
     category: "Women's Fashion",
     isFavorite: false,
     description:
@@ -76,7 +111,7 @@ List<ProductItemModel> products = [
     imgUrl:
         "https://images.pexels.com/photos/22434769/pexels-photo-22434769.jpeg",
     name: "Leather Bags",
-    price: 30000,
+    price: 300,
     category: "Women's Fashion",
     isFavorite: true,
     description:
@@ -88,7 +123,7 @@ List<ProductItemModel> products = [
     imgUrl:
         "https://images.pexels.com/photos/27835292/pexels-photo-27835292.jpeg",
     name: "Luxury Handbags",
-    price: 45000,
+    price: 4500,
     category: "Women's Fashion",
     isFavorite: false,
     description:
@@ -100,7 +135,7 @@ List<ProductItemModel> products = [
     imgUrl:
         "https://images.pexels.com/photos/22434759/pexels-photo-22434759.jpeg",
     name: "Elegant Handbags",
-    price: 50000,
+    price: 5000,
     category: "Women's Fashion",
     isFavorite: false,
     description:
@@ -112,7 +147,7 @@ List<ProductItemModel> products = [
     imgUrl:
         "https://images.pexels.com/photos/15432831/pexels-photo-15432831.jpeg",
     name: "Stylish Handbag",
-    price: 65000,
+    price: 6500,
     category: "Women's Fashion",
     isFavorite: false,
     description:
@@ -124,7 +159,7 @@ List<ProductItemModel> products = [
     imgUrl:
         "https://images.pexels.com/photos/27835299/pexels-photo-27835299.jpeg",
     name: "Stylish Leather",
-    price: 70000,
+    price: 700,
     category: "Women's Fashion",
     isFavorite: false,
     description:

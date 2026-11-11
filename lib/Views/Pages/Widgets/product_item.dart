@@ -36,7 +36,7 @@ class ProductItem extends StatelessWidget {
                   width: 34,
                   height: 34,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade600.withOpacity(0.7),
+                    color: Colors.grey.shade600.withValues(alpha: 0.7),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(

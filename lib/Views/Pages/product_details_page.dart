@@ -217,7 +217,7 @@ class ProductDetailsPage extends StatelessWidget {
                                       ),
                                       alignment: Alignment.center,
                                       child: Text(
-                                        size.name,
+                                        size.name.toUpperCase(),
                                         style:
                                             state is SelectedSize &&
                                                 state.size == size
